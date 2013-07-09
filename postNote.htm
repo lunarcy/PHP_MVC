@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" /> 
+<title>Notebook - Post Note</title>
+<!-- 
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+<script src='http://code.jquery.com/jquery-latest.min.js' type='text/javascript'> </script>
+-->
+<script src="https://www.google.com/jsapi"></script>
+<script>
+google.load('jquery', '1.5.2');
+</script>
+<h2> JQuery for Post Note Form. </h2>
+</head>
+
+
+<body>
+
+<p id='test'>Test Jquery</p>
+<div id='postList'></div>
+<a href="/bindev/index.php?action=list">See all Notes</a>
+<br><br>
+<form id="myForm">
+	<p>
+	Title:<input type='text' name="title">
+	Content:<input type='text' name="content">
+	</p>
+	<input id="submitButton" type="button" value="Post Note">
+</form>
+<br><br>
+<div id="formOutput">Form Output Response</div>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $("p#test").click(function(){
+    $(this).fadeOut();
+	$("div#postList").load("/bindev/index.php?action=list", function(responseTxt, statusTxt, xhr){
+		if(statusTxt=="success")
+			alert("Load Notes list Successfully!");
+		if(statusTxt=="error")
+			alert("Error"+xhr.status+": "+xhr.statusText);
+	}).slideDown();
+  });
+  
+    $("h2").click(function(){
+    $("p#test").fadeIn();
+	$("div#postList").hide();
+  });
+});
+
+//POST form, stay on the same page, with Result response show in a DIV.
+$(document).ready(function() {
+	$('input#submitButton').click( function() {
+		$.post('/bindev/index.php?action=post', $('form#myForm').serialize(), function(data){
+			$('div#formOutput').html(data);
+			setTimeout(function(){	// hide the response in 3 sec.
+				$('#formOutput').fadeOut();
+			}, 3000);
+		});
+	});
+});
+
+/*
+$(document).ready(function(){
+	$('input#submitButton').click( function() {
+		$.ajax({
+			url: '/bindev/index.php?action=post',
+			type: 'post',
+			dataType: 'json',
+			data: $('form#myForm').serialize(),
+			beforeSend:function(){
+				launchpreloader();
+			},
+			complete:function(){
+				stopPreloader();
+			},
+			error:function(xhr,status,error){
+				alert("Error"+status+": "+xhr+ " " +error);
+			},
+			success:function(data) {
+				alert(data);
+			}
+		});
+	});
+});
+*/
+
+/*
+$(document).on('submit', 'form#myForm', function(e) {
+     $.ajax({
+        url: $(this).attr('action'),
+        type: $(this).attr('method'),
+        data: $(this).serialize(),
+        success: function(html) {
+			alert('ok');
+        }
+    });
+    e.preventDefault();
+});
+*/
+</script>
+
+</body>
+</html>
