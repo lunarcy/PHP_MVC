@@ -7,11 +7,11 @@
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
 <script src='http://code.jquery.com/jquery-latest.min.js' type='text/javascript'> </script>
 -->
-<script src="https://www.google.com/jsapi"></script>
-<script>
-google.load('jquery', '1.5.2');
-</script>
+<script src='http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js' type='text/javascript'></script>
+<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.0/jquery.validate.js"></script>
+<link rel="stylesheet" type="text/css" href="css/test.css">
 <h2> JQuery for Post Note Form. </h2>
+
 </head>
 
 
@@ -21,18 +21,54 @@ google.load('jquery', '1.5.2');
 <div id='postList'></div>
 <a href="/bindev/index.php?action=list">See all Notes</a>
 <br><br>
-<form id="myForm">
+<form id="myForm" action="/bindev/index.php?action=post" method="POST">
 	<p>
-	Title:<input type='text' name="title">
-	Content:<input type='text' name="content">
+	Title:<input type='text' class="required" name="title">
+	Content:<input type='text' class="required" name="content" minlength="5">
 	</p>
-	<input id="submitButton" type="button" value="Post Note">
+	<input id="submitButton" type="submit" value="Post Note">
 </form>
 <br><br>
 <div id="formOutput">Form Output Response</div>
 
 
 <script type="text/javascript">
+$(document).ready(function(){
+	$("#myForm").validate({
+	rules: {
+		/*name: "required",*/
+		title: { required: true },
+		/*email: {
+			required: true,
+			email: true,
+		},*/
+		content: {
+            required: true,
+            minlength: 5
+        }
+	},
+	messages: {
+		title: "<li>Please enter a title.</li>",
+		content: {
+            required: "<li>Please enter content.</li>",
+            minlength: "<li>Your content is not long enough.</li>"
+        }
+    },
+    submitHandler: function(form) {
+        $(form).ajaxSubmit({
+            url:"/bindev/index.php?action=post",
+            type:"POST",
+            success: function(){
+                alert(data);
+				$('div#formOutput').html(data);
+                //$('#contact-form').hide();
+                //$('#sent').show();
+            }
+        });
+    }
+	});
+});
+
 $(document).ready(function(){
   $("p#test").click(function(){
     $(this).fadeOut();
@@ -51,7 +87,7 @@ $(document).ready(function(){
 });
 
 //POST form, stay on the same page, with Result response show in a DIV.
-$(document).ready(function() {
+/*$(document).ready(function() {
 	$('input#submitButton').click( function() {
 		$.post('/bindev/index.php?action=post', $('form#myForm').serialize(), function(data){
 			$('div#formOutput').html(data);
@@ -61,6 +97,7 @@ $(document).ready(function() {
 		});
 	});
 });
+*/
 
 /*
 $(document).ready(function(){
@@ -100,7 +137,10 @@ $(document).on('submit', 'form#myForm', function(e) {
     e.preventDefault();
 });
 */
+
+
 </script>
+
 
 </body>
 </html>

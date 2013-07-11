@@ -2,7 +2,11 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=gb2312" /> 
 <title>PHP MVC Notebook</title>
-<script src='http://code.jquery.com/jquery-latest.min.js' type='text/javascript'> </script>
+<script src="https://www.google.com/jsapi"></script>
+<script>
+google.load('jquery', '1.6.2');
+</script>
+<link rel="stylesheet" type="text/css" href="css/test.css">
 </head>
 <body>
 <a href="postNote.htm">Post a new Note</a><br>
@@ -43,6 +47,9 @@ switch ($action) {
 		break;
 }
 
+/*$action = (in_array($action, array('post', 'list', 'delete')) ? $action : 'list').'Controller';
+$controller = new $action();
+*/
 $view = $controller->getView();
 $view->display();
 ?>
